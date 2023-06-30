@@ -1,0 +1,91 @@
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "HtmlParser",
+            "request": "launch",
+            "mainClass": "main.java.com.core.HtmlParser",
+            "projectName": "WEBCREEPER_949cdcaf"
+        },
+        {
+            "type": "java",
+            "name": "M3U8Crawler",
+            "request": "launch",
+            "mainClass": "main.java.com.core.M3U8Crawler",
+            "projectName": "WEBCREEPER_949cdcaf"
+        },
+        {
+            "type": "java",
+            "name": "Test",
+            "request": "launch",
+            "mainClass": "test.Test",
+            "projectName": "WEBCREEPER_949cdcaf"
+        },
+        {
+            "type": "java",
+            "name": "TSVideoFileMerger",
+            "request": "launch",
+            "mainClass": "main.java.com.core.TSVideoFileMerger",
+            "projectName": "WEBCREEPER_949cdcaf"
+        },
+        {
+            "type": "java",
+            "name": "M3U8FileCreeper",
+            "request": "launch",
+            "mainClass": "main.java.com.core.M3U8FileCreeper",
+            "projectName": "WEBCREEPER_949cdcaf"
+        },
+        {
+            "type": "java",
+            "name": "DownloadTask",
+            "request": "launch",
+            "mainClass": "main.java.com.core.DownloadTask",
+            "projectName": "WEBCREEPER_949cdcaf"
+        },
+        {
+            "type": "java",
+            "name": "TSVideoFileGenerate",
+            "request": "launch",
+            "mainClass": "main.java.com.core.TSVideoFileGenerate",
+            "projectName": "WEBCREEPER_949cdcaf"
+        },
+        {
+            "type": "java",
+            "name": "Connect",
+            "request": "launch",
+            "mainClass": "main.java.com.core.Connect",
+            "projectName": "WEBCREEPER_949cdcaf"
+        },
+        {
+            "type": "java",
+            "name": "Launch DBConnect",
+            "request": "launch",
+            "mainClass": "main.java.com.core.DBConnect",
+            "projectName": "WEBCREEPER_949cdcaf"
+        },
+        {
+            "type": "java",
+            "name": "Launch Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Launch App",
+            "request": "launch",
+            "mainClass": "App",
+            "projectName": "WEBCREEPER_949cdcaf"
+        },
+        {
+            "type": "java",
+            "name": "Launch Connect",
+            "request": "launch",
+            "mainClass": "Connect",
+            "projectName": "WEBCREEPER_949cdcaf"
+        }
+    ]
+}

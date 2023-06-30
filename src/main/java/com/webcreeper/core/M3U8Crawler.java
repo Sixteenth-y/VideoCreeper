@@ -1,4 +1,4 @@
-package main.java.com.core;
+package com.webcreeper.core;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,44 +8,55 @@ import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.URL;
 import java.net.Proxy.Type;
-import java.util.ArrayList;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class M3U8FileCreeper {
+public class M3U8Crawler {
 
     public static final String M3U8_PATH = "temp\\m3u8";
     public static final String TS_PATH = "temp\\ts";
 
 
+    /**
+     * 获取资源的父级路径
+     * @param urlPath
+     * @return
+     */
     public static String getParentsSourcePath (String urlPath){
         return urlPath.substring(0, urlPath.lastIndexOf("/") + 1);
     }
 
-    public static ArrayList<String> tsfilter(String content) {
-        String regx = ".*\\.ts";
+    /**
+     * 筛选出ts文件
+     * @param content
+     * @return
+     */
+    public static List<String> filterTsFiles(String content) {
+        String regex = ".*\\.ts";
 
         return Arrays.stream(content.split("\\r?\\n"))
-                .filter(o -> o.matches(regx))
-                .collect(Collectors.toCollection(ArrayList::new));
+                .filter(o -> o.matches(regex))
+                .collect(Collectors.toList());
     }
 
     /**
      * 给缺少完整路径的ts文件添加完整路径
-     * @param content m3u8文件文本
+     * @param m3u8Content m3u8文件文本
      * @param parentPath 完整资源路径
      * @return
      */
-    public static String tsUrlFixed(String content, String parentPath) {
+    public static String fixMissingTsUrls(String m3u8Content, String parentPath) {
         StringBuilder builder = new StringBuilder();
 
         Pattern pattern = Pattern.compile(System.lineSeparator());
-        Matcher matcher = pattern.matcher(content);
+        Matcher matcher = pattern.matcher(m3u8Content);
         int start = 0;
         while (matcher.find(start)) {
-            String line = content.substring(start, matcher.start());
+            String line = m3u8Content.substring(start, matcher.start());
             if (line.contains(".ts") && !line.startsWith(parentPath)) {
                 builder.append(parentPath);
             }
@@ -70,6 +81,18 @@ public class M3U8FileCreeper {
 
     }
 
+    public static void setHeader(HttpURLConnection conn){
+        conn.setRequestProperty("User-Agent", "Mozilla/5.0"
+            + " (Windows NT 10.0; Win64; x64) "
+            + "AppleWebKit/537.36 (KHTML, like Gecko) Firefox/89.0");
+        
+        conn.setRequestProperty("Accept", "text/html,"
+            + "application/xhtml+xml,application/xml;"
+            + "q=0.9,image/webp,*/*;q=0.8");
+        
+        //conn.setRequestProperty(TS_PATH, M3U8_PATH);
+    }
+
     // public void srcCreeper(String url) throws IOException{
 
     // String tmpName = File.separator + System.currentTimeMillis();
@@ -88,34 +111,51 @@ public class M3U8FileCreeper {
      * @return
      * @throws IOException
      */
-    public String srcCreeper(String url) throws IOException {
-        return srcCreeper(url, null);
+    public String fetchContent(String url) throws IOException {
+        return fetchContent(url, null);
     }
 
     /**
      * 获取资源内容
-     * @param urlStr url路径
+     * @param urlPath url路径
      * @param proxy 代理信息
      * @return
      * @throws IOException
      */
-    public String srcCreeper(String urlStr, Proxy proxy) throws IOException {
+    public String fetchContent(String urlPath, Proxy proxy) throws IOException {
         StringBuilder content = new StringBuilder();
 
-        URL url = new URL(urlStr);
+        URL url = new URL(urlPath);
     
         //判断是否使用代理
         HttpURLConnection conn = (HttpURLConnection) (
             proxy != null ?  url.openConnection(proxy) :  url.openConnection());
+        
+        setHeader(conn);
 
         conn.setRequestMethod("GET");
 
         int responeseCode = conn.getResponseCode();
 
+        // 获取响应编码
+        String contentType = conn.getContentType();
+        String charset = StandardCharsets.UTF_8.name(); // 默认使用 UTF-8 编码
+        if (contentType != null) {
+            String[] values = contentType.split(";");
+
+            for (String value : values) {
+                value = value.trim();
+                if (value.toLowerCase().startsWith("charset=")) {
+                    charset = value.substring("charset=".length());
+                    break;
+                }
+            }
+        }
+
         if (responeseCode == HttpURLConnection.HTTP_OK) {
 
             try (BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(conn.getInputStream()))) {
+                    new InputStreamReader(conn.getInputStream(), charset))) {
 
                 String line;
                 while ((line = reader.readLine()) != null) {
@@ -140,13 +180,13 @@ public class M3U8FileCreeper {
 
 
     public static void main(String[] args) {
-        M3U8FileCreeper creeper = new M3U8FileCreeper();
+        M3U8Crawler creeper = new M3U8Crawler();
         String content = "";
         Proxy proxy = null;
         proxy = creatProxyInfo(Type.HTTP, "127.0.0.1", 7890);
 
         try {
-            content = creeper.srcCreeper("https://cdn.bigcloud.click/hls/841624/index.m3u8?t=1687966227&m=FZAdFWy3F-5NOFXQfUBF0w", proxy);
+            content = creeper.fetchContent("https://hsex.men/video-837887.htm", proxy);
             FileOperate operation = new FileOperate();
             operation.write("D://temp//test.m3u8", content); 
         
