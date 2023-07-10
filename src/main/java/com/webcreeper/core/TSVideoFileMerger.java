@@ -177,12 +177,4 @@ public class TSVideoFileMerger {
                 outFilePath + File.separator + fileName);
         return procBuilder.start();
     }
-
-    public static void main(String[] args) {
-        String folder = "D:\\temp\\m3u8\\video_1688045788789";
-        String outFilePath = "D:\\temp\\m3u8\\video_1688045788789";
-        String fileName = "video.mp4";
-
-        mergeFile(folder, outFilePath, fileName);
-    }
 }

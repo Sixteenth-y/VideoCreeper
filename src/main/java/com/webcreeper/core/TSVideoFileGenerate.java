@@ -56,6 +56,11 @@ public class TSVideoFileGenerate {
         
     }
 
+    public static String tsFilesNameFix(String name){
+        return name.substring(name.lastIndexOf("/") + 1, name.lastIndexOf(".ts")+4);
+
+    }
+
     /**
      * 执行ts下载任务，使用线程池进行下载
      * @param deque
@@ -119,15 +124,5 @@ public class TSVideoFileGenerate {
         service.awaitTermination(taskNum * SINGAL_MAX_DOWNLOAD_TIME, TimeUnit.SECONDS); 
     }
 
-    
-
-    public static void main(String[] args) {
-        String[] arr = new String[]{
-            "http://www.jacnfabu.xyz/video/m3u8//2023/06/04/dd662d71/",
-            ".ts",
-            "D:\\User\\Desktop\\良家极品眼镜妹，换上女仆装再干一炮，掰穴狂舔骚逼，各种姿势爆操.m3u8"
-        };
-        
-        linkedGenerate(arr[0], arr[1], arr[2], 0, 469, 4);
-    }
+ 
 }

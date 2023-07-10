@@ -37,9 +37,10 @@ public class M3U8Crawler {
      */
     public static List<String> filterTsFiles(String content) {
         String regex = ".*\\.ts";
+        String regex1 = ".*\\.ts\\?";
 
         return Arrays.stream(content.split("\\r?\\n"))
-                .filter(o -> o.matches(regex))
+                .filter(o -> o.matches(regex) || o.matches(regex1))
                 .collect(Collectors.toList());
     }
 
@@ -176,29 +177,6 @@ public class M3U8Crawler {
 
         return content.toString();
 
-    }
-
-
-    public static void main(String[] args) {
-        M3U8Crawler creeper = new M3U8Crawler();
-        String content = "";
-        Proxy proxy = null;
-        proxy = creatProxyInfo(Type.HTTP, "127.0.0.1", 7890);
-
-        try {
-            content = creeper.fetchContent("https://hsex.men/video-837887.htm", proxy);
-            FileOperate operation = new FileOperate();
-            operation.write("D://temp//test.m3u8", content); 
-        
-        } catch (IOException e) {
-            // TODO: handle exception
-            e.printStackTrace();
-        }
-
-        
-
-        //System.out.println(content);
-        
     }
 
 }

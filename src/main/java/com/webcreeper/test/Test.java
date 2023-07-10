@@ -15,7 +15,9 @@ import com.webcreeper.core.TSVideoFileMerger;
 public class Test {
     public static void main(String[] args) {
 
-        String pageUrl = "https://hsex.men/video-841150.htm";
+        //String pageUrl = "https://hsex.men/video-841150.htm";
+        String pageUrl = "https://hsex.men/video-836619.htm";
+        String videoName = "体制内换妻公务员和人民教师";
         String tmpName = "video_" + System.currentTimeMillis();
         
         String m3u8DirPath = "D:/temp/m3u8/";
@@ -36,23 +38,39 @@ public class Test {
             operate.write(tmpDir + "video.m3u8", m3u8Content);
 
             // 将ts下载到本地
-            TSVideoFileGenerate generate = new TSVideoFileGenerate();
-            BlockingDeque<DownloadTask> deque = new LinkedBlockingDeque<>();
+            generate(m3u8Content, tmpDir);
             
-            M3U8Crawler.filterTsFiles(m3u8Content).stream().map(o-> {
-                return new DownloadTask(o, tmpDir + o.substring(o.lastIndexOf("/") + 1));
-            }).forEach(deque::add);
+            // TSVideoFileGenerate generate = new TSVideoFileGenerate();
+            // BlockingDeque<DownloadTask> deque = new LinkedBlockingDeque<>();
             
-            generate.excuteTask(deque);
+            // M3U8Crawler.filterTsFiles(m3u8Content).stream().map(o-> {
+            //     return new DownloadTask(o, tmpDir + o.substring(o.lastIndexOf("/") + 1));
+            // }).forEach(deque::add);
+            
+            // generate.excuteTask(deque);
 
             // 合并ts文件
-            TSVideoFileMerger.mergeFile(tmpDir, tmpDir, tmpName + ".mp4");
+            TSVideoFileMerger.mergeFile(tmpDir, tmpDir, videoName + ".mp4");
 
         } catch (Exception e) {
             // TODO: handle exception
             e.printStackTrace();
 
         }
+
+    }
+
+    public static void generate(String m3u8Content, String tmpDir) throws Exception{
+
+        // 将ts下载到本地
+        TSVideoFileGenerate generate = new TSVideoFileGenerate();
+        BlockingDeque<DownloadTask> deque = new LinkedBlockingDeque<>();
+        
+        M3U8Crawler.filterTsFiles(m3u8Content).stream().map(o-> {
+            return new DownloadTask(o, tmpDir + o.substring(o.lastIndexOf("/") + 1));
+        }).forEach(deque::add);
+        
+        generate.excuteTask(deque);
 
     }
 

@@ -82,16 +82,4 @@ public class HtmlParser {
         tageMap.clear();
     }
 
-
-    public static void main(String[] args) {
-        try {
-            HtmlParser parser = new HtmlParser(new File("D:/temp/test.html"));
-            System.out.println(parser.findAttriByTageName("source", "src"));
-
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
-
 }

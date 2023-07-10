@@ -1,8 +1,11 @@
 package com.webcreeper.core;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.Buffer;
 
 /**
  * control file
@@ -37,4 +40,25 @@ public class FileOperate {
         }
     }
     
+    /**
+     * 
+     * @param path
+     * @return
+     * @throws IOException
+     */
+    public String read(String path) throws IOException{
+        File file = new File(path);
+        StringBuilder content = new StringBuilder();
+
+        try(BufferedReader reader = new BufferedReader(new FileReader(file))){
+            
+            reader.lines().forEach(o->{content.append(o).append(System.lineSeparator());});
+
+        }catch(Exception e){
+
+        }
+
+        return content.toString();
+    }
+
 }
